@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,18 +23,24 @@ Project[] projects = new Project[]
     new Project(2, "Project 2", "Description for Project 2"),
     new Project(3, "Project 3", "Description for Project 3")
 };
-app.MapPost("/projects", () =>
-{  
+
+app.MapGet("/projects", () => Results.Ok(projects));
+/*{  
+    return projects;
+})
+.WithName("GetProjects");
+*/
+
+app.MapPost("/projects", (Project newProject) =>
+{
+    var project = new Project(projects.Length + 1, newProject.Title, newProject.Description);
+    projects = projects.Append(project).ToArray();
+
     
 })
 .WithName("PostProjects");
 
 
-app.MapGet("/projects", () =>
-{  
-    return projects;
-})
-.WithName("GetProjects");
 
 
 app.Run();
