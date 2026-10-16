@@ -19,10 +19,10 @@ app.UseHttpsRedirection();
 
 Project[] projects = new Project[]   
 {
-    new Project(1, "Project 1", "Description for Project 1"),
-    new Project(2, "Project 2", "Description for Project 2"),
-    new Project(3, "Project 3", "Description for Project 3")
+    
 };
+
+
 
 app.MapGet("/projects", () => Results.Ok(projects));
 /*{  
@@ -33,13 +33,12 @@ app.MapGet("/projects", () => Results.Ok(projects));
 
 app.MapPost("/projects", (Project newProject) =>
 {
-    var project = new Project(projects.Length + 1, newProject.Title, newProject.Description);
+    var project = new Project(projects.Select(p => p.id).DefaultIfEmpty(0).Max() + 1, newProject.Title, newProject.Description);
     projects = projects.Append(project).ToArray();
-
+    return Results.Created($"/projects/{project.id}", project);
     
 })
 .WithName("PostProjects");
-
 
 
 
