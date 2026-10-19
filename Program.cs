@@ -26,7 +26,7 @@ Project[] projects = new Project[]
 
 
 
-app.MapGet("/projects", () => Results.Ok(projects));
+app.MapGet("/projects", () => Results.Ok(projects)).WithName("GetProjects");
 /*{  
     return projects;
 })
@@ -45,7 +45,7 @@ app.MapGet("/projects/{id}", (int id) =>
     {   
         return Results.Ok(project);
     }
-});
+}).WithName("GetProjectsId");
 
 app.MapPost("/projects", (Project newProject) =>
 {
@@ -64,6 +64,57 @@ app.MapPost("/projects", (Project newProject) =>
 .WithName("PostProjects");
 
 
+app.MapDelete("/projects/{id}", (int id) =>
+{
+    var project = projects.FirstOrDefault(p => p.id == id);
+    if (project == null)
+    {
+        return Results.NotFound();
+    }
+    else
+    {
+        projects = projects.Where(p => p.id != id).ToArray();
+        return Results.NoContent();
+    }
+}).WithName("DeleteProjects");
+
+app.MapPut("/projects/{id}", (int id, Project updatedProject) =>
+{
+    var project = projects.FirstOrDefault(p => p.id == id);
+    if (project == null)
+    {
+        return Results.NotFound();
+    }
+    else
+    {
+        if (string.IsNullOrWhiteSpace(updatedProject.Title) || updatedProject.Title.Length > 100)
+        {
+            return Results.BadRequest();
+        }
+        else
+        {
+            var updated = new Project(id, updatedProject.Title, updatedProject.Description);
+            projects = projects.Select(p => p.id == id ? updated : p).ToArray();
+            return Results.Ok(updated);
+        }
+    }
+}).WithName("PutProjects");
+
+
+app.MapPatch("/projects/{id}", (int id, Project updatedProject) =>
+{
+    var project = projects.FirstOrDefault(p => p.id == id);
+    if (project == null)
+    {
+        return Results.NotFound();
+    }
+    else
+    {
+        var updated = new Project(id, updatedProject.Title ?? project.Title, updatedProject.Description ?? project.Description);
+        projects = projects.Select(p => p.id == id ? updated : p).ToArray();
+        return Results.Ok(updated);
+    }
+}).WithName("PatchProjects");
 
 app.Run();
 
