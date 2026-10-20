@@ -110,9 +110,16 @@ app.MapPatch("/projects/{id}", (int id, Project updatedProject) =>
     }
     else
     {
-        var updated = new Project(id, updatedProject.Title ?? project.Title, updatedProject.Description ?? project.Description);
-        projects = projects.Select(p => p.id == id ? updated : p).ToArray();
-        return Results.Ok(updated);
+        if (string.IsNullOrWhiteSpace(updatedProject.Title) || updatedProject.Title.Length > 100)
+        {
+            return Results.BadRequest();
+        }
+        else
+        {
+            var updated = new Project(id, updatedProject.Title ?? project.Title, updatedProject.Description ?? project.Description);
+            projects = projects.Select(p => p.id == id ? updated : p).ToArray();
+            return Results.Ok(updated);
+        }
     }
 }).WithName("PatchProjects");
 
