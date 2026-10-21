@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -110,7 +106,8 @@ app.MapPatch("/projects/{id}", (int id, Project updatedProject) =>
     }
     else
     {
-        if (string.IsNullOrWhiteSpace(updatedProject.Title) || updatedProject.Title.Length > 100)
+        
+        if (updatedProject.Title != null && (string.IsNullOrWhiteSpace(updatedProject.Title) || updatedProject.Title.Length > 100))
         {
             return Results.BadRequest();
         }
