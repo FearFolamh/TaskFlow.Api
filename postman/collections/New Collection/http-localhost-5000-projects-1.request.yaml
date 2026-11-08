@@ -1,0 +1,17 @@
+$kind: http-request
+name: http://localhost:5000/projects/1
+description: ""
+url: http://localhost:5000/projects/1
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \  \r
+
+    \  \"description\": \"4\"\r
+
+    \  \r
+
+    }"
+order: 1000

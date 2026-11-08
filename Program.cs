@@ -22,8 +22,7 @@ app.UseHttpsRedirection();
 
 Project[] projects = new Project[]   
 {
-    new Project(1, "Project 1", "Description of Project 1"),
-    new Project(2, "Project 2", "Description of Project 2"),
+   
 
 };
 
@@ -45,7 +44,7 @@ app.MapGet("/projects/{id}", async (int id, AppDbContext db) =>
     }
 }).WithName("GetProjectsId");
 
-app.MapPost("/projects", (Project newProject) =>
+app.MapPost("/projects", async (Project newProject, AppDbContext db) =>
 {
 
     if (string.IsNullOrWhiteSpace(newProject.Title) || newProject.Title.Length > 100)
@@ -54,31 +53,32 @@ app.MapPost("/projects", (Project newProject) =>
     }
     else
     {
-        var project = new Project(projects.Select(p => p.id).DefaultIfEmpty(0).Max() + 1, newProject.Title, newProject.Description);
-        projects = projects.Append(project).ToArray();
-        return Results.Created($"/projects/{project.id}", project);
+        db.Projects.Add(newProject);
+        await db.SaveChangesAsync();
+        return Results.Created($"/projects/{newProject.id}", newProject);
     }
 })
 .WithName("PostProjects");
 
 
-app.MapDelete("/projects/{id}", (int id) =>
+app.MapDelete("/projects/{id}", async (int id, AppDbContext db) =>
 {
-    var project = projects.FirstOrDefault(p => p.id == id);
+    var project = await db.Projects.FindAsync(id);
     if (project == null)
     {
         return Results.NotFound();
     }
     else
     {
-        projects = projects.Where(p => p.id != id).ToArray();
+        db.Projects.Remove(project);
+        await db.SaveChangesAsync();
         return Results.NoContent();
     }
 }).WithName("DeleteProjects");
 
-app.MapPut("/projects/{id}", (int id, Project updatedProject) =>
+app.MapPut("/projects/{id}", async (int id, Project updatedProject, AppDbContext db) =>
 {
-    var project = projects.FirstOrDefault(p => p.id == id);
+    var project = await db.Projects.FindAsync(id);
     if (project == null)
     {
         return Results.NotFound();
@@ -91,17 +91,18 @@ app.MapPut("/projects/{id}", (int id, Project updatedProject) =>
         }
         else
         {
-            var updated = new Project(id, updatedProject.Title, updatedProject.Description);
-            projects = projects.Select(p => p.id == id ? updated : p).ToArray();
-            return Results.Ok(updated);
+            project.Title = updatedProject.Title;
+            project.Description = updatedProject.Description;
+            await db.SaveChangesAsync();
+            return Results.Ok(project);
         }
     }
 }).WithName("PutProjects");
 
 
-app.MapPatch("/projects/{id}", (int id, Project updatedProject) =>
+app.MapPatch("/projects/{id}", async (int id, UpdateProjectRequest updatedProject, AppDbContext db) =>
 {
-    var project = projects.FirstOrDefault(p => p.id == id);
+    var project = await db.Projects.FindAsync(id);
     if (project == null)
     {
         return Results.NotFound();
@@ -114,17 +115,40 @@ app.MapPatch("/projects/{id}", (int id, Project updatedProject) =>
             return Results.BadRequest();
         }
         else
-        {
-            var updated = new Project(id, updatedProject.Title ?? project.Title, updatedProject.Description ?? project.Description);
-            projects = projects.Select(p => p.id == id ? updated : p).ToArray();
-            return Results.Ok(updated);
+        {   
+            Console.WriteLine($"Title: {updatedProject.Title ?? "NULL"}");
+            Console.WriteLine($"Description: {updatedProject.Description ?? "NULL"}");
+            if (updatedProject.Title != null)
+            {
+                
+                project.Title = updatedProject.Title;
+            }
+            if (updatedProject.Description != null)
+            {
+                project.Description = updatedProject.Description;
+            }
+            Console.WriteLine($"Получен Title: [{updatedProject.Title ?? "NULL"}]");
+            Console.WriteLine($"Получен Description: [{updatedProject.Description ?? "NULL"}]");
+
+            Console.WriteLine($"В базе Title: [{project.Title ?? "NULL"}]");
+            Console.WriteLine($"В базе Description: [{project.Description ?? "NULL"}]");
+            await db.SaveChangesAsync();
+            return Results.Ok(project);
         }
     }
 }).WithName("PatchProjects");
 
 app.Run();
 
-public record Project(int id, string? Title, string? Description)
+public class Project
 {
-   
+    public int id { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
+}
+
+public class UpdateProjectRequest
+{
+    public string? Title { get; set; }
+    public string? Description { get; set; }
 }
