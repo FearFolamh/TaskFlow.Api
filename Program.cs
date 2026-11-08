@@ -1,6 +1,13 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlite("Data Source=taskflow.db");
+});
 
 var app = builder.Build();
 
@@ -22,16 +29,11 @@ Project[] projects = new Project[]
 
 
 
-app.MapGet("/projects", () => Results.Ok(projects)).WithName("GetProjects");
-/*{  
-    return projects;
-})
-.WithName("GetProjects");
-*/
+app.MapGet("/projects", async (AppDbContext db) => Results.Ok(await db.Projects.ToListAsync())).WithName("GetProjects");
 
-app.MapGet("/projects/{id}", (int id) => 
+app.MapGet("/projects/{id}", async (int id, AppDbContext db) => 
 {
-    var project = projects.FirstOrDefault(p => p.id == id);
+    var project = await db.Projects.FindAsync(id);
     if (project == null)
     {   
         return Results.NotFound();
@@ -122,7 +124,7 @@ app.MapPatch("/projects/{id}", (int id, Project updatedProject) =>
 
 app.Run();
 
-record Project(int id, string? Title, string? Description)
+public record Project(int id, string? Title, string? Description)
 {
    
 }
