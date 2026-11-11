@@ -11,8 +11,7 @@ using TaskFlow.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var environment = builder.Environment.EnvironmentName;
-Console.WriteLine($"Environment: {environment}");
+
 //builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -21,6 +20,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ProjectService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
