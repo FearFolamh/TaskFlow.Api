@@ -1,4 +1,7 @@
+namespace TaskFlow.Api.Data;
+
 using Microsoft.EntityFrameworkCore;
+using TaskFlow.Api.Models;
 
 public class AppDbContext : DbContext
 {
