@@ -6,12 +6,17 @@ using TaskFlow.Api.Data;
 using TaskFlow.Api.Endpoints;
 using TaskFlow.Api.Services;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
+
+var environment = builder.Environment.EnvironmentName;
+Console.WriteLine($"Environment: {environment}");
 //builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlite("Data Source=taskflow.db");
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<ProjectService>();
 
