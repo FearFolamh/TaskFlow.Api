@@ -36,6 +36,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapProjectEndpoints();
 app.Run();
-
+public partial class Program { }
 
 
