@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.csproj": {}
+    "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.csproj": {
+    "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.csproj",
+        "projectUniqueName": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.csproj",
         "projectName": "TaskFlow.Api",
-        "projectPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.csproj",
+        "projectPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.csproj",
         "packagesPath": "C:\\Users\\dom\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\obj\\",
+        "outputPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dom\\AppData\\Roaming\\NuGet\\NuGet.Config"

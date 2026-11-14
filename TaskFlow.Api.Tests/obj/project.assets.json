@@ -3172,11 +3172,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.Tests\\TaskFlow.Api.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.Tests\\TaskFlow.Api.Tests.csproj",
       "projectName": "TaskFlow.Api.Tests",
-      "projectPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.Tests\\TaskFlow.Api.Tests.csproj",
+      "projectPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.Tests\\TaskFlow.Api.Tests.csproj",
       "packagesPath": "C:\\Users\\dom\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.Tests\\obj\\",
+      "outputPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\dom\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -3192,8 +3192,8 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.csproj": {
-              "projectPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.api\\TaskFlow.Api.csproj"
+            "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.csproj": {
+              "projectPath": "C:\\Users\\dom\\C#_Project\\TaskFlow.Api\\TaskFlow.Api.csproj"
             }
           }
         }
