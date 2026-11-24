@@ -1,10 +1,31 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using TaskFlow.Api.Models;
+using TaskFlow.Api.DTOs;
+using TaskFlow.Api.Data;
+using TaskFlow.Api.Endpoints;
+using TaskFlow.Api.Services;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+
+//builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddScoped<ProjectService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -13,31 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
-Project[] projects = new Project[]   
-{
-    new Project(1, "Project 1", "Description for Project 1"),
-    new Project(2, "Project 2", "Description for Project 2"),
-    new Project(3, "Project 3", "Description for Project 3")
-};
-app.MapPost("/projects", () =>
-{  
-    
-})
-.WithName("PostProjects");
-
-
-app.MapGet("/projects", () =>
-{  
-    return projects;
-})
-.WithName("GetProjects");
-
-
+app.MapProjectEndpoints();
 app.Run();
+public partial class Program { }
 
-record Project(int id, string? Title, string? Description)
-{
-   
-}
+
